@@ -1,0 +1,11 @@
+requests>=2.31.0
+streamlit>=1.35.0
+pandas>=2.2.0
+
+# Added in week 2 (graph stage):
+# torch
+# torch-geometric
+
+# Added in week 3 (LLM explanation stage):
+# transformers
+# accelerate
