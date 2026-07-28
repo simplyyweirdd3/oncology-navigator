@@ -1,0 +1,21 @@
+gene,variant_description,drug_name,drug_class,cancer_type
+EGFR,Exon 19 deletion,Osimertinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
+EGFR,L858R,Osimertinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
+EGFR,T790M,Osimertinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
+EGFR,Exon 19 deletion,Erlotinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
+EGFR,L858R,Gefitinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
+BRAF,V600E,Vemurafenib,BRAF inhibitor,Melanoma
+BRAF,V600E,Dabrafenib,BRAF inhibitor,Melanoma
+BRAF,V600K,Vemurafenib,BRAF inhibitor,Melanoma
+BRAF,V600E,Encorafenib,BRAF inhibitor,Colorectal cancer
+HER2,Amplification,Trastuzumab,HER2-targeted monoclonal antibody,Breast cancer
+HER2,Amplification,Pertuzumab,HER2-targeted monoclonal antibody,Breast cancer
+HER2,Amplification,Trastuzumab deruxtecan,HER2-targeted antibody-drug conjugate,Breast cancer
+BRCA1,Pathogenic variant,Olaparib,PARP inhibitor,Ovarian cancer
+BRCA2,Pathogenic variant,Olaparib,PARP inhibitor,Ovarian cancer
+BRCA1,Pathogenic variant,Talazoparib,PARP inhibitor,Breast cancer
+BRCA2,Pathogenic variant,Rucaparib,PARP inhibitor,Ovarian cancer
+ALK,Rearrangement,Alectinib,ALK inhibitor,Non-small cell lung cancer
+ALK,Rearrangement,Crizotinib,ALK inhibitor,Non-small cell lung cancer
+KRAS,G12C,Sotorasib,KRAS G12C inhibitor,Non-small cell lung cancer
+KRAS,G12C,Adagrasib,KRAS G12C inhibitor,Colorectal cancer
