@@ -35,32 +35,52 @@ class MatchExplanation:
 def build_template_explanation(gene: str, classification: Optional[str],
                                  trial_title: str, interventions: list,
                                  conditions: list, mentions_gene: bool,
-                                 similarity_score: float) -> MatchExplanation:
+                                 similarity_score: float,
+                                 known_drugs_for_gene: Optional[list] = None) -> MatchExplanation:
     """
     The always-available, instant explanation. No model required.
+
+    known_drugs_for_gene: the list of drug names our seed table actually
+    confirms are linked to this gene. Only a match against THIS list counts
+    as a genuine "graph-connected" match, any intervention text alone is
+    not enough, since most trials list interventions our knowledge base
+    has never verified against this specific gene.
     """
-    drug_list = ", ".join(interventions[:3]) if interventions else "an unspecified treatment"
+    known_drugs_for_gene = [d.lower() for d in (known_drugs_for_gene or [])]
+    matched_drug = next(
+        (i for i in interventions if i.strip().lower() in known_drugs_for_gene), None
+    )
     condition_list = ", ".join(conditions[:2]) if conditions else "this condition"
 
     if mentions_gene:
         match_type = "direct"
         headline = f"This trial explicitly requires a {gene} mutation."
+        drug_note = f"and is testing {', '.join(interventions[:3])}" if interventions else "though its treatment details aren't listed"
         reasoning = (
             f"The trial's own eligibility criteria mention {gene} directly, "
             f"which is the clearest kind of match. It's currently recruiting "
-            f"patients with {condition_list} and is testing {drug_list}. "
+            f"patients with {condition_list} {drug_note}. "
             f"Because your variant is classified as {classification or 'clinically relevant'} "
             f"in ClinVar, this is a strong candidate to discuss with a treating physician."
         )
-    else:
+    elif matched_drug:
         match_type = "graph"
         headline = f"This trial doesn't mention {gene} by name, but its drug does."
         reasoning = (
             f"This trial's eligibility text never says '{gene}' outright, but it's "
-            f"testing {drug_list}, a drug connected to {gene} in our knowledge base. "
-            f"That's the kind of connection a plain keyword search would miss entirely. "
-            f"It's recruiting for {condition_list}. Worth flagging to a physician even "
-            f"though the trial text alone wouldn't have surfaced it."
+            f"testing {matched_drug}, a drug our knowledge base confirms is linked "
+            f"to {gene}. That's the kind of connection a plain keyword search would "
+            f"miss entirely. It's recruiting for {condition_list}. Worth flagging to "
+            f"a physician even though the trial text alone wouldn't have surfaced it."
+        )
+    else:
+        match_type = "weak"
+        headline = f"This trial doesn't clearly connect to {gene} yet."
+        reasoning = (
+            f"Neither the eligibility text nor a confirmed drug link ties this trial "
+            f"to {gene} directly. It's recruiting for {condition_list}, but the "
+            f"connection here is weaker than the other matches, worth a second look "
+            f"rather than a strong recommendation."
         )
 
     return MatchExplanation(

@@ -29,7 +29,7 @@ from torch_geometric.transforms import ToUndirected
 
 def run_demo(gene: str, condition: str, drug_hint: str = None):
     print(f"\n{'='*60}")
-    print(f"ONCOLOGY NAVIGATOR — LIVE DEMO for {gene}")
+    print(f"ONCOLOGY NAVIGATOR, LIVE DEMO for {gene}")
     print(f"{'='*60}\n")
 
     print(f"[1/4] Pulling live pathogenic {gene} variants from ClinVar...")
