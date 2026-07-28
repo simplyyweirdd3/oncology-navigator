@@ -41,8 +41,8 @@ The best tools get built by people willing to sit with a problem long enough to 
 - [x] Variant-drug-trial graph schema (`docs/graph_schema.md`)
 - [x] GraphSAGE ranking model (`src/graphsage_model.py`) - tested against live ClinVar + clinicaltrials.gov data
 - [ ] LLM explanation layer (Qwen2.5)
-- [ ] Streamlit frontend
-- [ ] Deploy to Hugging Face Spaces
+- [x] Streamlit frontend
+- [x] Deploy to Streamlit
 
 ## Data sources
 
