@@ -3,6 +3,8 @@ streamlit>=1.35.0
 pandas>=2.2.0
 torch>=2.0.0
 torch-geometric>=2.5.0
+networkx>=3.0
+plotly>=5.20.0
 
 # Not used by the deployed app (template explanations are instant and
 # don't need a model download), but available if the LLM explanation

@@ -23,6 +23,7 @@ from src.trials_client import search_trials, count_trials
 from src.graph_builder import build_graph, load_seed_table
 from src.graphsage_model import OncologyGraphSAGE, get_embeddings, rank_trials_for_variant
 from src.explanation_generator import build_template_explanation
+from src.graph_viz import build_match_graph_figure
 
 st.set_page_config(page_title="Oncology Navigator", page_icon="🧬", layout="wide")
 
@@ -220,6 +221,17 @@ if run_button:
                 m2.metric("Total recruiting trials", total_trial_count)
                 m3.metric("Direct text matches (top 10)", match_types.count("direct"))
                 m4.metric("Graph-connected (top 10)", match_types.count("graph"))
+
+                fig = build_match_graph_figure(gene, ranking, nct_to_trial, known_drugs_for_gene)
+                if fig is not None:
+                    st.subheader("How these matches connect")
+                    st.caption(
+                        f"{gene} in teal, confirmed drugs in amber, matching trials in "
+                        "burgundy. A trial linked through a drug, rather than straight "
+                        "to the gene, is exactly the kind of connection a plain keyword "
+                        "search would miss."
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
 
                 st.subheader(f"Ranked trials for {gene}")
 
