@@ -28,7 +28,7 @@ The best tools get built by people willing to sit with a problem long enough to 
 - [x] ClinVar client (`src/clinvar_client.py`) - live tested against NCBI E-utilities
 - [x] ClinicalTrials.gov client (`src/trials_client.py`) - live tested against API v2
 - [x] Variant-drug-trial graph schema (`docs/graph_schema.md`)
-- [ ] GraphSAGE ranking model
+- [x] GraphSAGE ranking model (`src/graphsage_model.py`) - tested against live ClinVar + clinicaltrials.gov data
 - [ ] LLM explanation layer (Qwen2.5)
 - [ ] Streamlit frontend
 - [ ] Deploy to Hugging Face Spaces
@@ -37,6 +37,36 @@ The best tools get built by people willing to sit with a problem long enough to 
 
 - [ClinVar](https://www.ncbi.nlm.nih.gov/clinvar/) via [E-utilities](https://www.ncbi.nlm.nih.gov/clinvar/docs/programmatic_access/) - free, no key required for light use
 - [ClinicalTrials.gov API v2](https://clinicaltrials.gov/data-api/api) - free, no key required
+
+## What the live test actually taught me
+
+I ran the full pipeline against real, live BRAF variants and real, currently
+recruiting melanoma trials testing vemurafenib, and both trials that came
+back explicitly said "BRAF" in their eligibility text. At first that felt
+like the graph hadn't proven its point. But sitting with it, I realized
+that's actually the correct and expected result, not a miss.
+
+Here's why. Trials built around a targeted therapy like vemurafenib almost
+always spell out the biomarker in their inclusion criteria, because that's
+how the drug got approved in the first place, on the condition that only
+biomarker-positive patients receive it. Regulators require it, so trial
+writers state it plainly. A well-designed precision oncology trial being
+upfront about its biomarker isn't a flaw in my system, it's the field
+working the way it's supposed to.
+
+Where the graph actually earns its keep is messier territory: a
+combination trial where only one drug out of several targets the variant,
+a trial that names a drug class instead of the drug itself, or a biomarker
+that's implied by an approved indication without ever being spelled out
+in so many words. Direct text matching handles the clean, well-labeled
+cases fine on its own. The graph is for the cases that aren't clean.
+
+I'd rather write that down honestly than pretend my first live run found
+some dramatic hidden connection it didn't. The mechanism is sound, and an
+earlier synthetic test already confirmed the indirect variant-drug-trial
+path fires correctly when a trial doesn't mention the gene by name. The
+real lesson from today is a domain one, not a bug: sometimes the "boring"
+result is the one worth understanding.
 
 ## Setup
 
