@@ -100,6 +100,31 @@ def search_trials(condition: str, intervention: Optional[str] = None,
     return [_parse_study(s) for s in studies]
 
 
+def count_trials(condition: str, intervention: Optional[str] = None,
+                  recruiting_only: bool = True) -> int:
+    """
+    Lightweight count-only query: how many recruiting trials actually
+    match, regardless of the page_size we fetch in detail. Used so the
+    UI can show a real total instead of a number that's just an
+    artifact of our fetch limit.
+    """
+    params = {
+        "query.cond": condition,
+        "pageSize": 1,
+        "countTotal": "true",
+        "format": "json",
+    }
+    if intervention:
+        params["query.intr"] = intervention
+    if recruiting_only:
+        params["filter.overallStatus"] = "RECRUITING"
+
+    resp = requests.get(BASE_URL, params=params, timeout=20)
+    resp.raise_for_status()
+    data = resp.json()
+    return int(data.get("totalCount", len(data.get("studies", []))))
+
+
 if __name__ == "__main__":
     print("Searching live recruiting breast cancer + EGFR trials...")
     trials = search_trials("breast cancer", intervention="EGFR", page_size=3)

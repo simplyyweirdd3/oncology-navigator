@@ -76,9 +76,13 @@ point, it's why this beats keyword search.
 ## Seed data needed before this can run
 
 The one piece with no free live API is the drug-target-variant seed table.
-This will start as a small hand-curated CSV (10-20 well-known oncology
-drug-variant pairs, e.g. osimertinib/EGFR, vemurafenib/BRAF V600E,
-trastuzumab/HER2, olaparib/BRCA1-2), enough to demonstrate the concept.
+It currently covers 61 real, clinically documented drug-gene pairs across
+34 genes (EGFR, BRAF, HER2, BRCA1/2, ALK, KRAS, MET, RET, ROS1, NTRK1-3,
+FLT3, IDH1/2, JAK2, BCR-ABL1, KIT, PDGFRA, VHL, FGFR2/3, PIK3CA, ESR1,
+NRAS, MAP2K1, ATM, PALB2, CHEK2, and the Lynch syndrome mismatch repair
+genes), spanning lung, breast, blood, GI, and renal cancers. Every entry
+is a real FDA-approved or clinically established targeted therapy
+relationship, hand-checked rather than pulled from an automated source.
 This is normal and expected for a student project, real precision oncology
 platforms maintain similar curated knowledge bases (e.g. OncoKB) because
 this information isn't standardized anywhere else for free.

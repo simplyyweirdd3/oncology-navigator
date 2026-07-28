@@ -143,6 +143,29 @@ def get_variants_for_gene(gene: str, classification: str = "pathogenic",
     return records
 
 
+def count_variants(gene: str, classification: str = "pathogenic",
+                    api_key: Optional[str] = None) -> int:
+    """
+    Lightweight count-only query: how many pathogenic records actually
+    exist for this gene in ClinVar, regardless of how many we fetch in
+    detail. Used so the UI can show a real total instead of a number
+    that's just an artifact of our fetch limit.
+    """
+    params = {
+        "db": "clinvar",
+        "term": f"{gene}[gene] AND {classification}[CLNSIG]",
+        "retmode": "json",
+        "retmax": 0,
+    }
+    if api_key:
+        params["api_key"] = api_key
+
+    resp = requests.get(ESEARCH_URL, params=params, timeout=15)
+    resp.raise_for_status()
+    data = resp.json()
+    return int(data.get("esearchresult", {}).get("count", 0))
+
+
 if __name__ == "__main__":
     # Quick manual test: pull 3 pathogenic BRCA1 variants live.
     print("Searching ClinVar for pathogenic BRCA1 variants...")

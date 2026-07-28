@@ -4,6 +4,8 @@ EGFR,L858R,Osimertinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
 EGFR,T790M,Osimertinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
 EGFR,Exon 19 deletion,Erlotinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
 EGFR,L858R,Gefitinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
+EGFR,Exon 20 insertion,Amivantamab,EGFR-MET bispecific antibody,Non-small cell lung cancer
+EGFR,Exon 20 insertion,Mobocertinib,EGFR tyrosine kinase inhibitor,Non-small cell lung cancer
 BRAF,V600E,Vemurafenib,BRAF inhibitor,Melanoma
 BRAF,V600E,Dabrafenib,BRAF inhibitor,Melanoma
 BRAF,V600K,Vemurafenib,BRAF inhibitor,Melanoma
@@ -11,11 +13,50 @@ BRAF,V600E,Encorafenib,BRAF inhibitor,Colorectal cancer
 HER2,Amplification,Trastuzumab,HER2-targeted monoclonal antibody,Breast cancer
 HER2,Amplification,Pertuzumab,HER2-targeted monoclonal antibody,Breast cancer
 HER2,Amplification,Trastuzumab deruxtecan,HER2-targeted antibody-drug conjugate,Breast cancer
+HER2,Amplification,Neratinib,HER2 tyrosine kinase inhibitor,Breast cancer
+HER2,Amplification,Tucatinib,HER2 tyrosine kinase inhibitor,Breast cancer
 BRCA1,Pathogenic variant,Olaparib,PARP inhibitor,Ovarian cancer
 BRCA2,Pathogenic variant,Olaparib,PARP inhibitor,Ovarian cancer
 BRCA1,Pathogenic variant,Talazoparib,PARP inhibitor,Breast cancer
 BRCA2,Pathogenic variant,Rucaparib,PARP inhibitor,Ovarian cancer
 ALK,Rearrangement,Alectinib,ALK inhibitor,Non-small cell lung cancer
 ALK,Rearrangement,Crizotinib,ALK inhibitor,Non-small cell lung cancer
+ALK,Rearrangement,Lorlatinib,ALK inhibitor,Non-small cell lung cancer
 KRAS,G12C,Sotorasib,KRAS G12C inhibitor,Non-small cell lung cancer
 KRAS,G12C,Adagrasib,KRAS G12C inhibitor,Colorectal cancer
+MET,Exon 14 skipping,Capmatinib,MET inhibitor,Non-small cell lung cancer
+MET,Exon 14 skipping,Tepotinib,MET inhibitor,Non-small cell lung cancer
+RET,Fusion,Selpercatinib,RET inhibitor,Non-small cell lung cancer
+RET,Fusion,Pralsetinib,RET inhibitor,Non-small cell lung cancer
+RET,M918T,Selpercatinib,RET inhibitor,Medullary thyroid cancer
+ROS1,Fusion,Entrectinib,ROS1 inhibitor,Non-small cell lung cancer
+ROS1,Fusion,Crizotinib,ROS1 inhibitor,Non-small cell lung cancer
+NTRK1,Fusion,Larotrectinib,TRK inhibitor,Solid tumors
+NTRK2,Fusion,Larotrectinib,TRK inhibitor,Solid tumors
+NTRK3,Fusion,Entrectinib,TRK inhibitor,Solid tumors
+FLT3,Internal tandem duplication,Midostaurin,FLT3 inhibitor,Acute myeloid leukemia
+FLT3,Internal tandem duplication,Gilteritinib,FLT3 inhibitor,Acute myeloid leukemia
+IDH1,R132H,Ivosidenib,IDH1 inhibitor,Acute myeloid leukemia
+IDH2,R140Q,Enasidenib,IDH2 inhibitor,Acute myeloid leukemia
+JAK2,V617F,Ruxolitinib,JAK inhibitor,Myelofibrosis
+BCR-ABL1,Fusion,Imatinib,BCR-ABL tyrosine kinase inhibitor,Chronic myeloid leukemia
+BCR-ABL1,Fusion,Dasatinib,BCR-ABL tyrosine kinase inhibitor,Chronic myeloid leukemia
+BCR-ABL1,Fusion,Nilotinib,BCR-ABL tyrosine kinase inhibitor,Chronic myeloid leukemia
+KIT,Exon 11 mutation,Imatinib,KIT inhibitor,Gastrointestinal stromal tumor
+KIT,D816V,Avapritinib,KIT inhibitor,Gastrointestinal stromal tumor
+PDGFRA,D842V,Avapritinib,PDGFRA inhibitor,Gastrointestinal stromal tumor
+VHL,Pathogenic variant,Belzutifan,HIF-2alpha inhibitor,Renal cell carcinoma
+FGFR2,Fusion,Pemigatinib,FGFR inhibitor,Cholangiocarcinoma
+FGFR3,Fusion,Erdafitinib,FGFR inhibitor,Urothelial carcinoma
+PIK3CA,H1047R,Alpelisib,PI3K inhibitor,Breast cancer
+PIK3CA,E545K,Alpelisib,PI3K inhibitor,Breast cancer
+ESR1,Ligand-binding domain mutation,Elacestrant,Selective estrogen receptor degrader,Breast cancer
+NRAS,Q61K,Binimetinib,MEK inhibitor,Melanoma
+MAP2K1,Pathogenic variant,Binimetinib,MEK inhibitor,Melanoma
+ATM,Pathogenic variant,Olaparib,PARP inhibitor,Prostate cancer
+PALB2,Pathogenic variant,Olaparib,PARP inhibitor,Breast cancer
+CHEK2,Pathogenic variant,Olaparib,PARP inhibitor,Breast cancer
+MLH1,Pathogenic variant,Pembrolizumab,PD-1 inhibitor,MSI-High solid tumors
+MSH2,Pathogenic variant,Pembrolizumab,PD-1 inhibitor,MSI-High solid tumors
+MSH6,Pathogenic variant,Pembrolizumab,PD-1 inhibitor,MSI-High solid tumors
+PMS2,Pathogenic variant,Pembrolizumab,PD-1 inhibitor,MSI-High solid tumors

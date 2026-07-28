@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import streamlit as st
 from torch_geometric.transforms import ToUndirected
 
-from src.clinvar_client import get_variants_for_gene
-from src.trials_client import search_trials
+from src.clinvar_client import get_variants_for_gene, count_variants
+from src.trials_client import search_trials, count_trials
 from src.graph_builder import build_graph, load_seed_table
 from src.graphsage_model import OncologyGraphSAGE, get_embeddings, rank_trials_for_variant
 from src.explanation_generator import build_template_explanation
@@ -27,42 +27,84 @@ from src.explanation_generator import build_template_explanation
 st.set_page_config(page_title="Oncology Navigator", page_icon="🧬", layout="wide")
 
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-    .stApp { background: linear-gradient(180deg, #fafbfc 0%, #f0f4f8 100%); }
-    div[data-testid="stSidebar"] { background: #1a2332; }
-    div[data-testid="stSidebar"] * { color: #e8edf2 !important; }
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+
+    div[data-testid="stSidebar"] {
+        background: #f0e9d8; border-right: 1px solid #ddd0b8;
+    }
+    div[data-testid="stSidebar"] label { font-weight: 600 !important; letter-spacing: 0.01em; }
     div[data-testid="stSidebar"] input {
-        background: #2a3a4f !important; color: #ffffff !important;
-        border: 1px solid #3d5170 !important;
+        border-radius: 8px !important; border: 1px solid #c9b896 !important;
     }
     div[data-testid="stSidebar"] button {
-        background: #d94f4f !important; color: white !important;
-        border: none !important; font-weight: 600 !important;
+        background: #0f6e75 !important;
+        color: #faf6ee !important; border: none !important; font-weight: 600 !important;
+        border-radius: 8px !important; padding: 0.6rem 0 !important;
+        box-shadow: 0 2px 8px rgba(15, 110, 117, 0.25) !important;
     }
-    h1 { color: #1a2332; }
+
+    .hero {
+        padding: 2.2rem 2.6rem; border-radius: 14px; margin-bottom: 1.6rem;
+        background: #ffffff;
+        border: 1px solid #e6dcc6; border-left: 5px solid #0f6e75;
+    }
+    .hero h1 {
+        font-family: 'Source Serif 4', serif; color: #2a1f1c; font-weight: 600;
+        font-size: 2.3rem; margin: 0 0 0.5rem 0; letter-spacing: -0.01em;
+    }
+    .hero p {
+        color: #5a4d44; font-size: 1.05rem; margin: 0; max-width: 660px; line-height: 1.5;
+    }
+
+    h2, h3, h4 { font-family: 'Source Serif 4', serif !important; color: #2a1f1c !important; }
+
     .match-card {
-        background: white; border-radius: 12px; padding: 1.4rem 1.6rem;
-        margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        border-left: 4px solid #d1d5db;
+        background: #ffffff; border-radius: 10px; padding: 1.5rem 1.7rem;
+        margin-bottom: 1.1rem; border: 1px solid #e6dcc6;
+        box-shadow: 0 1px 4px rgba(122, 90, 60, 0.08);
+        transition: box-shadow 0.15s ease;
     }
-    .match-card.direct { border-left-color: #2f9e5e; }
-    .match-card.graph { border-left-color: #4a7fd1; }
-    .match-card.weak { border-left-color: #d1d5db; }
+    .match-card:hover {
+        box-shadow: 0 4px 14px rgba(122, 90, 60, 0.15);
+    }
+    .match-card.direct { border-left: 4px solid #0f6e75; }
+    .match-card.graph { border-left: 4px solid #b0763f; }
+    .match-card.weak { border-left: 4px solid #c9bfae; }
+    .match-card h4 {
+        font-family: 'Source Serif 4', serif !important;
+        color: #2a1f1c !important; font-size: 1.2rem !important; font-weight: 600 !important;
+    }
+    .match-card p { color: #4a3f38 !important; }
+
     .badge {
-        display: inline-block; padding: 2px 10px; border-radius: 999px;
-        font-size: 0.78rem; font-weight: 600; margin-right: 8px;
+        display: inline-block; padding: 3px 12px; border-radius: 999px;
+        font-size: 0.74rem; font-weight: 700; margin-right: 8px;
+        letter-spacing: 0.03em; text-transform: uppercase;
     }
-    .badge.direct { background: #e3f6ea; color: #1e7d47; }
-    .badge.graph { background: #e8eefc; color: #2f5bb7; }
-    .badge.weak { background: #f0f1f3; color: #6b7280; }
+    .badge.direct { background: #dcedee; color: #0f6e75; }
+    .badge.graph { background: #f5ead9; color: #8f5a24; }
+    .badge.weak { background: #ece6da; color: #857868; }
+
+    div[data-testid="stMetric"] {
+        background: #ffffff; border-radius: 10px; padding: 0.9rem 1rem;
+        border: 1px solid #e6dcc6;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #0f6e75 !important; font-family: 'Source Serif 4', serif;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🧬 Oncology Navigator")
-st.caption(
-    "Enter a gene to find currently recruiting clinical trials that may be "
-    "relevant, ranked using live ClinVar and clinicaltrials.gov data."
-)
+st.markdown("""
+<div class="hero">
+    <h1>🧬 Oncology Navigator</h1>
+    <p>Enter a gene to find currently recruiting clinical trials that may be
+    relevant, ranked using live ClinVar and clinicaltrials.gov data,
+    with a graph model that catches connections plain keyword search misses.</p>
+</div>
+""", unsafe_allow_html=True)
 
 with st.expander("About this tool, how it works and what it doesn't do"):
     st.markdown("""
@@ -104,14 +146,19 @@ if run_button:
         with st.spinner(f"Pulling live pathogenic {gene} variants from ClinVar..."):
             try:
                 variants = get_variants_for_gene(gene, limit=5)
+                total_variant_count = count_variants(gene)
             except Exception as e:
                 st.error(f"Couldn't reach ClinVar: {e}")
                 variants = []
+                total_variant_count = 0
 
         if not variants:
             st.warning(f"No pathogenic variant records found for {gene} in ClinVar.")
         else:
-            st.success(f"Found {len(variants)} variant record(s) for {gene}.")
+            st.success(
+                f"Found {total_variant_count} pathogenic variant record(s) for {gene} "
+                f"in ClinVar (showing top {len(variants)})."
+            )
             with st.expander("Variant details"):
                 for v in variants:
                     st.write(f"**{v.variation_name}**, {v.classification}")
@@ -123,14 +170,21 @@ if run_button:
                         intervention=drug_hint if drug_hint else None,
                         page_size=10,
                     )
+                    total_trial_count = count_trials(
+                        condition, intervention=drug_hint if drug_hint else None
+                    )
                 except Exception as e:
                     st.error(f"Couldn't reach clinicaltrials.gov: {e}")
                     trials = []
+                    total_trial_count = 0
 
             if not trials:
                 st.warning("No currently recruiting trials found for that search.")
             else:
-                st.success(f"Found {len(trials)} recruiting trial(s).")
+                st.success(
+                    f"Found {total_trial_count} recruiting trial(s) "
+                    f"(showing top {len(trials)})."
+                )
 
                 with st.spinner("Building match graph and ranking..."):
                     seed = load_seed_table("sample_data/drug_variant_seed.csv")
@@ -162,17 +216,17 @@ if run_button:
                     match_types.append(exp.match_type)
 
                 m1, m2, m3, m4 = st.columns(4)
-                m1.metric("Variants found", len(variants))
-                m2.metric("Trials ranked", len(trials))
-                m3.metric("Direct text matches", match_types.count("direct"))
-                m4.metric("Graph-connected matches", match_types.count("graph"))
+                m1.metric("Total variants in ClinVar", total_variant_count)
+                m2.metric("Total recruiting trials", total_trial_count)
+                m3.metric("Direct text matches (top 10)", match_types.count("direct"))
+                m4.metric("Graph-connected (top 10)", match_types.count("graph"))
 
                 st.subheader(f"Ranked trials for {gene}")
 
                 badge_label = {
-                    "direct": "🎯 Direct text match",
-                    "graph": "🕸️ Graph-connected match",
-                    "weak": "◌ Weak connection",
+                    "direct": "Direct match",
+                    "graph": "Graph-connected",
+                    "weak": "Weak connection",
                 }
 
                 for nct_id, score in ranking:
