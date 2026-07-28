@@ -1,3 +1,14 @@
+---
+title: Oncology Navigator
+emoji: 🧬
+colorFrom: red
+colorTo: yellow
+sdk: streamlit
+sdk_version: "1.60.0"
+app_file: src/app.py
+pinned: false
+---
+
 # Oncology Navigator
 
 An end-to-end pipeline that takes a patient's genomic variant data and returns ranked, currently recruiting clinical trials they may qualify for, with plain-language explanations for each match.
